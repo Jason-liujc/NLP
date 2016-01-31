@@ -1,77 +1,11 @@
-; -----------------------------------------------------------------------------
-; Utility Functions
-; -----------------------------------------------------------------------------
-
-
-; FUNCTION: ADD-TO-LM
-; PURPOSE:  Adds the given (phrase frame demon) triplet to the global LEX-MEM,
-;           making sure to not add duplicate phrases
-; INPUT:    phrase: a list of English words
-;           frame: a frame associated with that phrase
-;           demons: a list of 0 or more demon instantiations
-; OUTPUT:   phrase-frame-demon triplet constructed
-
-(defun CHECK-DUPLICATE (wrdph, mem)
-  (subsetp wrdph, mem)
-
-
-  ; OR
-
-  (loop for v in mem 
-    do (if (member wrdph v) 
-          T)
-          F)
-)
-
-(defun REMOVE-FRAME (frame, mem)
-  'UNIMPLEMENTED
-)
-
-
-(defun ADD-TO-LM (phrase frame demons)
-  (if (equal (CHECK-DUPLICATE phrase, *LM) t)
-    (REMOVE-FRAME frame *LM)
-  )
-
-  (append (append frame demons) *LM)
-
-  (return (append phrase frame demons))
-)
-
-
-
-;	ADD-TO-LM (wrd-ph, concept, demons)
-;	helper function: CHECK-DUPLICATE (wrd-ph, *LM)
-;	Returns true if wrd-ph is in *LM using a loop to loop thru *LM
-;	Returns false otherwse
-;	If CHECK-DUPLICATE returned true, remove frame from *LM
-;	Append wrd-ph concept demon together into a list
-;	Insert this list to the front of *LM
-
-
-
-; -----------------------------------------------------------------------------
-; Test Helper functions
-; -----------------------------------------------------------------------------
-
-; Testing function used to wipe our globals clean
-; between tests
 (defun EX-CLEAR-GLOBALS ()
-    ; Clear out all of our example bindings
     (every #'makunbound *WM)
-  
     (setq *LM NIL)
-    (setq *WM NIL)
-    (setq *DM NIL)
-    (setq *TX NIL)
-    
-    ; Good to go for a new set of tests!
 )
 
-; Testing function used to set up globals with their spec-values
+(setq ADD-TO-LM-tests t)
+
 (defun SETUP-GLOBALS ()
-    (setq *WM NIL)
-    (setq *DM NIL)
     (setq *LM '(
       ((HIGH SCHOOL) (INSTITUTION TYPE (HIGHSCHOOL)) ((DEM-REF LOC BEF ACT)))
       ((IS) (BEING AGENT AGENT
@@ -106,29 +40,109 @@
       ((COCAINE) (DRUG NAME (COCAINE)
                     TYPE (STIMULANT)) nil)
     ))
-    (setq *TX '(
-      (MEMB HUMAN ANIMATE)
-      (MEMB ANIMATE OBJECT)
-      (MEMB HOME LOC)
-      (MEMB THEATER LOC)
-      (MEMB FIDO CANINE)
-      (MEMB CANINE ANIMATE)
-      (MEMB INGEST PHYS-ACT)
-      (MEMB COMMUN MENTAL-ACT)
-      (MEMB TEACH MENTAL-ACT)
-      (MEMB PHYS-ACT ACT)
-      (MEMB THINK ACT)
-      (MEMB BEING ACT)
-      (MEMB MENTAL-ACT ACT)
-      (MEMB INSTITUTION SOCIAL-ENT)
-      (MEMB KNOWLEDGE ABSTRACT)
-      (MEMB SOCIAL-ENT CONCEPT)
-      (MEMB COCAINE DRUG)
-      (MEMB WEED DRUG)
-      (MEMB MJ WEED)
-      (MEMB WEED MJ)
-      (MEMB DRUG PHYS-OBJ)
-    ))
 )
 
-;Call functions below:
+
+
+
+
+
+
+; -----------------------------------------------------------------------------
+; Utility Functions
+; -----------------------------------------------------------------------------
+
+(defun CHECK-DUPLICATE (phrase mem)
+  ;(subsetp phrase mem)
+  ; OR
+  (loop for v in mem 
+    do (if (member phrase v) 
+          return T)
+  )
+  return F
+)
+
+(defun REMOVE-FRAME (phrase mem)
+  (loop for v in mem
+    do (if (equal phrase (car v))
+    ; remove v
+    )
+  )
+)
+
+
+; FUNCTION: ADD-TO-LM
+; PURPOSE:  Adds the given (phrase frame demon) triplet to the global LEX-MEM,
+;           making sure to not add duplicate phrases
+; INPUT:    phrase: a list of English words
+;           frame: a frame associated with that phrase
+;           demons: a list of 0 or more demon instantiations
+; OUTPUT:   phrase-frame-demon triplet constructed
+
+(defun ADD-TO-LM (phrase frame demons)
+  (if (CHECK-DUPLICATE phrase *LM)
+    (REMOVE-FRAME frame *LM)
+  )
+
+  (append (append frame demons) *LM)
+
+  (return (append phrase frame demons))
+)
+
+
+; ALGORITHM
+; Helper Function: CHECK-DUPLICATE (phrase mem)
+;     loops through mem
+;         returns t if phrase is in mem
+;     returns f
+
+; Helper Function: REMOVE-FRAME (phrase mem)
+;     loops through mem
+;         finds instance of phrase and removes the frame
+
+; ADD-TO-LM (phrase, concept, demons)
+;	If CHECK-DUPLICATE returned true, use REMOVE-FRAME 
+;	Append phrase concept demon together into a list
+;	Append this list to the front of *LM
+
+
+
+
+
+
+
+; -----------------------------------------------------------------------------
+; Test Helper functions
+; -----------------------------------------------------------------------------
+(defun test-case-lex-entry (actual expected case-name)
+    (cond
+        ((lex-equal actual expected) (format t "~A: success~%" case-name))
+        (t (format t "~A: failed~%Expected ~A~%Got ~A~%---------------------------~%" case-name expected actual))
+    )
+)
+
+(defun test-case-lex-mem (actual expected case-name)
+    (cond
+        ((and (subsetp expected actual :test #'lex-equal) (subsetp actual expected :test #'lex-equal)) (format t "~A: success~%" case-name))
+        (t (format t "~A: failed~%Expected ~A~%Got ~A~%---------------------------~%" case-name expected actual))
+    )
+)
+
+; Test cases: (ADD-TO-LM)
+(cond (ADD-TO-LM-tests
+(format t "Testing ADD-TO-LM...~%")
+    
+    (test-case-lex-entry (ADD-TO-LM '(GEORGE)
+                              '(HUMAN F-NAME (GEORGE)
+                                      GENDER (MALE))
+                              '((D1 A1) (D2 A21 A22)))
+                         '((GEORGE) (HUMAN F-NAME (GEORGE)
+                                           GENDER (MALE)) ((D1 A1) (D2 A21 A22))) "ADD-TO-LM_ex_1")
+    (test-case-lex-mem *LM
+                       '(
+                          ((GEORGE) (HUMAN F-NAME (GEORGE)
+                                           GENDER (MALE)) ((D1 A1) (D2 A21 A22)))
+                        ) "ADD-TO-LM_ex_2")
+    
+(format t "===========================~%")
+))
