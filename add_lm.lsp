@@ -10,8 +10,32 @@
 ;           frame: a frame associated with that phrase
 ;           demons: a list of 0 or more demon instantiations
 ; OUTPUT:   phrase-frame-demon triplet constructed
+
+(defun CHECK-DUPLICATE (wrdph, mem)
+  (subsetp wrdph, mem)
+
+
+  ; OR
+
+  (loop for v in mem 
+    do (if (member wrdph v) 
+          T)
+          F)
+)
+
+(defun REMOVE-FRAME (frame, mem)
+  'UNIMPLEMENTED
+)
+
+
 (defun ADD-TO-LM (phrase frame demons)
-    'UNIMPLEMENTED
+  (if (equal (CHECK-DUPLICATE phrase, *LM) t)
+    (REMOVE-FRAME frame *LM)
+  )
+
+  (append (append frame demons) *LM)
+
+  (return (append phrase frame demons))
 )
 
 
