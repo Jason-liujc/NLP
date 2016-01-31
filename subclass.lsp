@@ -13,6 +13,9 @@
 ;;Recursively, check if entity is in *TX, if entity matches, see if the next word 
 ;;(new-entity) matches with class (if so, return true) (if you reach the end of *TX,
 ;;return nil), else IS-SUBCLASS (new-entity, class). 
+;; TA notes: check if there's a circular condition
+
+
 
 
 

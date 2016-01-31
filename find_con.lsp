@@ -22,6 +22,8 @@
 ;returns helperFunction depending on dir
 
 
+;TA notes: use is-subclass, we can reverse the direction to simplify it!
+
 
 ; -----------------------------------------------------------------------------
 ; Test Helper functions
