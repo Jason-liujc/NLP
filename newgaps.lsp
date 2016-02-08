@@ -1,4 +1,75 @@
+;;Jason 
+
+; FUNCTION: EXPAND-SLOTS
+; PURPOSE:  Looks for gaps in a list of slot-filler pairs, dispatching EXPAND
+;           on each filler.
+; INPUTS:   sf: list of (slot filler) pairs
+; OUTPUT:   List of slot-filler pairs with any gaps replaced by their values
+;           (follows any number of successive references)
+(defun EXPAND-SLOTS (sf)
+    (cond
+        ; Base case: got through them all
+        ((null sf) nil)
+        ; Recursive case: dispatch EXPAND on our first filler
+        (t (append (append (list (first sf))               ; rebuild our first slot-filler pair
+                           (list (EXPAND (second sf))))    ; dispatch EXPAND on the filler
+                           (EXPAND-SLOTS (nthcdr 2 sf))))  ; recurse on rest of sf
+    )
+)
+
+; FUNCTION: EXPAND
+; PURPOSE:  Returns the frame represented by the given atom (if it is bound)
+;           with all gaps replaced by their values
+; INPUTS:   atom: a symbol (possibly) representing a frame
+; OUTPUT:   That frame with all bound gaps replaced by their values
+(defun EXPAND (atom)
+    (cond
+        ; Base case: safety for getting nil input - just return nil
+        ((null atom) nil)
+        ; Base case: we got a non-NIL atom, so evaluate it if bound
+        ((atom atom) (if (boundp atom) (EXPAND (eval atom)) atom))
+        ; Base case: empty, or single pred frame
+        ((<= (length atom) 1) atom)
+        ; Main case: dispatch EXPAND-SLOTS on our slot-filler list
+        (t (cons (first atom) (EXPAND-SLOTS (rest atom))))
+    )
+)
+
 ; -----------------------------------------------------------------------------
+
+
+; FUNCTION: EXPAND-SLOTS
+; PURPOSE:  Looks for gaps in a list of slot-filler pairs, dispatching EXPAND
+;           on each filler.
+; INPUTS:   sf: list of (slot filler) pairs
+; OUTPUT:   List of slot-filler pairs with any gaps replaced by their values
+;           (follows any number of successive references)
+(defun ATM-EXPAND (sf)
+    (cond
+        ; Base case: got through them all
+        ((null sf) nil)
+        ; Recursive case: dispatch EXPAND on our first filler
+        (t (append (append (list (first sf))               ; rebuild our first slot-filler pair
+                           (list (EXPAND (second sf))))    ; dispatch EXPAND on the filler
+                           (ATM-EXPAND (nthcdr 2 sf))))  ; recurse on rest of sf
+    )
+)
+
+
+
+
+; FUNCTION: NEWATM
+; PURPOSE:  Produces a fresh, unused, unbound, unique symbol with the given
+;           symName prefix and (ostensibly) random numerical suffix
+; INPUT:    symName: symbol prefix for the new symbol
+; OUTPUT:   new unbound symbol with symName prefix and numeric suffix
+(defun NEWATM (symName)
+    ; Generate the new symbol using gensym
+    (let* ((new-sym (gensym (string symName))))
+        (intern (string new-sym))
+    )
+)
+
 
 
 ; FUNCTION: NEWGAPS
@@ -6,8 +77,15 @@
 ;           and returns a copy of the resulting frame
 ; INPUT:    frame: a frame
 ; OUTPUT:   frame with now unique gap-names
+
+
 (defun NEWGAPS (frame)
-    'UNIMPLEMENTED
+    ;;base case, just when it's null
+    ((null frame) null)
+    
+    
+    
+    
 )
 
 ;Algorithm:

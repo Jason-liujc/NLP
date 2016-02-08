@@ -1,3 +1,6 @@
+; ;;;;;;NOT FINISHED YET, ALMOST
+
+
 
 ; FUNCTION: IS-SUBCLASS
 ; PURPOSE:  Queries the global *TX for whether or not the given entity
@@ -7,6 +10,59 @@
 (defun IS-SUBCLASS (entity class)
     'UNIMPLEMENTED
 )
+
+;helper:
+(def SUBCLASS-HELPER(TX holder class entity)
+
+	(if (atom TX) 
+		(if (equal entity holder)
+			T   
+			(SUBCLASS-HELPER TX   )
+		
+		
+		
+		
+		)
+	
+	
+	
+	)
+
+
+	(if  ( and (listp TX) (listp (car TX)  )   )
+		(
+			(SUBCLASS-HELPER (car TX)  holder class entity )
+			(SUBCLASS-HELPER (cdr TX)  holder class   entity      )
+	
+		)
+		
+	)
+	
+	(if ((and  (listp TX)  (not (listp (car TX)))  )  )
+		(  
+			(SUBCLASS_HELPER TX (nth 1 TX)  class entity  ))
+		)
+	
+			
+
+
+	)
+
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ;; Algorithm
@@ -99,3 +155,6 @@
       (MEMB DRUG PHYS-OBJ)
     ))
 )
+
+
+
