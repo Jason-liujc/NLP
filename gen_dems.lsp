@@ -10,10 +10,26 @@
 ;           conatm: a CONatom indicating which frame the demons work for
 ; OUTPUT:   current state of *DM after insertion
 (defun GEN-DEMS (demons conatm)
-    'UNIMPLEMENTED
+
+	(setq *DM (append (GEN-DH demons conatm)  *DM )  )
+		
+
 )
 
 
+(defun GEN-DH (demons conatm)
+
+	
+	(loop for x in demons 
+		
+		collect (append (list (car x) ) (list conatm) (cdr x)   )
+	
+	)
+
+
+
+
+)
 
 ;; Algorithm:
 ;;add the first argument to demon list
@@ -101,3 +117,23 @@
       (MEMB DRUG PHYS-OBJ)
     ))
 )
+
+(SETUP-GLOBALS)
+
+
+
+
+	(GEN-DEMS '(
+			(DEM-SRCH TYPE AFT INSTITUTION)
+             (DEM-REF LOC BEF ACT)
+           )
+	'CON44
+) 
+
+(print (GEN-DEMS '(
+             (DEM-SRCH AGENT BEF HUMAN)
+           )
+'CON21
+))
+
+
