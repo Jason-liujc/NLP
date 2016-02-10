@@ -1,4 +1,3 @@
-
 ; FUNCTION: FIND-CON
 ; PURPOSE:  Returns the CONatom found by searching the *WM for a CONatom with a
 ;           pred of the given class starting at mycon in direction dir within
@@ -7,9 +6,52 @@
 ;           dir: either 'BEF or 'AFT indicating search direction
 ;           class: predicate superclass for which to search
 ; OUTPUT:   found CONatom, or nil if not found
-(defun FIND-CON (mycon dir class)
-    'UNIMPLEMENTED
+
+
+(defun LIST-AFT (mycon counter WM)
+  
+  (if (equal mycon (car WM)) 
+      (nthcdr counter WM)
+      (LIST-AFT mycon (+ counter 1) )
+  )
+  
 )
+
+
+(defun LIST-BEF (mycon counter WM)
+  (LIST-AFT mycon 0 (reverse WM) )
+
+)
+
+(defun LIST-DIR (mycon dir)
+  ;if the direction is wrong 
+  (if (and (not (equal dir 'AFT)) (not (equal dir 'BEF)) )
+    nil
+  )
+
+  ;if the direction is after
+  (if (equal dir 'AFT)
+      (LIST-AFT mycon 0 *WM)
+  )
+
+
+  ;if the direction is before
+  (if (equal dir 'BEF)
+      (LIST-BEF 0 mycon *WM)
+  )
+)
+
+(defun FIND-CON (mycon dir class)
+  (loop for x in (LIST-DIR mycon dir)
+
+      until (IS-SUBCLASS x class)
+
+      finally return x
+  )
+  nil
+)
+;;Jason is lame
+
 
 ;;Algorithm:
 ;Take in mycon, and use a loop that once mycon is found in *WM, enter helper function
