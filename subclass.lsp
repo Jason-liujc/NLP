@@ -7,60 +7,41 @@
 ;           ISA member of the given class
 ; INPUT:    entity, class: items in a class hierarchy
 ; OUTPUT:   boolean indicating hierarchical relationship
+
+
+
 (defun IS-SUBCLASS (entity class)
 	
-	(SUBCLASS-HELPER *TX *TX 2 class entity )
+	(SUBCLASS-HELPER *TX entity class )
 )
 
 ;helper:
-(defun SUBCLASS-HELPER(TX1 TX2  holder class entity)
+(defun SUBCLASS-HELPER(TX entity class)
+	
+	;if TX is nil then return nil
+	(if (equal TX nil) nil)
 
-	;if there's no more elements, then we return nil
-	(if (equal (cdr TX1) nil )  nil)  
 
-
-	;; in case it's circular
-	(if (atom TX2) 
-		(if (equal TX2 entity)
-			(if (equal holder class )  
-
-			;if it's true
-				T
+	(loop for x in TX do 
+	
+		(
+	
+			if ( equal ( nth 1 x ) entity)  
+				(if (equal  (nth 2 x)  class) 
+					(return T)
+					
+					(SUBCLASS-HELPER (remove x TX) (nth 2 x) class )
 				
-			;if the holder is not class, we search again
-				(SUBCLASS-HELPER  TX1 (cdr TX1) holder class (nth 2 TX2))
-			)
 
+				
+				
+				)
+			
+			
+				
 		)
-
 	)
-
-	;; if TX2 is a list and the first element of TX2 is also a list
-	(if  ( and (listp TX2) (listp (car TX2)  )   )
-
-		(SUBCLASS-HELPER TX1 (car TX1) holder class entity )
-		
-		(if (not  (atom (car TX1)  )   )  ;;we dont want it to be an atom. 
-		
-			(SUBCLASS-HELPER TX1 (cdr TX1)  holder class entity)
-
-		)
-		
-		
-	)
-	
-	;; if TX2 is a list but the first element is not a list
-	(if (and  (listp TX2)  (not (listp (car TX2)))  )  
-		
-		(SUBCLASS_HELPER TX1 (nth 1 TX2) (nth 2 TX2)  class entity  )
-		
-	
-	)
-
 )
-
-
-
 
 
 
@@ -163,7 +144,10 @@
 )
 (SETUP-GLOBALS)
 ;(cdr *TX)
-(IS-SUBCLASS 'HUMAN 'ANIMATE)
+(print 
+	(IS-SUBCLASS 'TEACH 'ACT)
+
+)
 
 
 
