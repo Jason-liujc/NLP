@@ -5,8 +5,16 @@
 ;           embedded in another *WM frame
 ; INPUT:    N/A
 ; OUTPUT:   CONatom
+
 (defun MAIN-ACT ()
-    'UNIMPLEMENTED
+  (loop for x in *WM
+    do (if (IS-SUBCLASS (car (EVAL x)) 'ACT)
+          (if (equal (FIND-CON x 'AFT x) nil)
+              (return x)
+          )
+       )
+  )
+  (return nil)
 )
 
 ;Call each is-subclass on each subclass in TX with ACT as second variable
