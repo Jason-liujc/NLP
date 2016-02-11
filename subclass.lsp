@@ -18,6 +18,7 @@
 ;helper:
 (defun SUBCLASS-HELPER(TX entity class)
 	
+	
 	;if TX is nil then return nil
 	(if (equal TX nil) nil)
 
@@ -30,16 +31,18 @@
 				(if (equal  (nth 2 x)  class) 
 					(return T)
 					
-					(SUBCLASS-HELPER (remove x TX) (nth 2 x) class )
+					(if (SUBCLASS-HELPER (remove x TX) (nth 2 x) class ) (return T))
 				
 
 				
 				
 				)
 			
-			
 				
 		)
+		
+		
+		
 	)
 )
 
@@ -145,7 +148,7 @@
 (SETUP-GLOBALS)
 ;(cdr *TX)
 (print 
-	(IS-SUBCLASS 'TEACH 'ACT)
+	(IS-SUBCLASS 'ACT 'THINK)
 
 )
 
