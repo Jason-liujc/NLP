@@ -1,3 +1,57 @@
+
+
+
+; FUNCTION: IS-SUBCLASS
+; PURPOSE:  Queries the global *TX for whether or not the given entity
+;           ISA member of the given class
+; INPUT:    entity, class: items in a class hierarchy
+; OUTPUT:   boolean indicating hierarchical relationship
+
+
+
+(defun IS-SUBCLASS (entity class)
+	
+	(SUBCLASS-HELPER *TX entity class )
+)
+
+;helper:
+(defun SUBCLASS-HELPER(TX entity class)
+	
+	
+	;if TX is nil then return nil
+	(if (equal TX nil) nil)
+
+	(if (equal entity class) (return-from SUBCLASS-HELPER t))
+
+	(loop for x in TX do 
+		(
+	
+			if ( equal ( nth 1 x ) entity)  
+				(if (equal  (nth 2 x)  class) 
+					(return T)
+					
+					(if (SUBCLASS-HELPER (remove x TX) (nth 2 x) class ) (return T))
+
+				
+				)
+			
+				
+		)
+		
+		
+		
+	)
+	
+)
+
+
+
+
+
+
+
+
+
 ; FUNCTION: FIND-CON
 ; PURPOSE:  Returns the CONatom found by searching the *WM for a CONatom with a
 ;           pred of the given class starting at mycon in direction dir within
@@ -8,18 +62,20 @@
 ; OUTPUT:   found CONatom, or nil if not found
 
 
-(defun LIST-AFT (mycon counter WM)
+(defun LIST-AFT (mycon  WM)
+  
+ ;(print WM)
   
   (if (equal mycon (car WM)) 
-      (nthcdr counter WM)
-      (LIST-AFT mycon (+ counter 1) )
+      (cdr  WM)
+      (LIST-AFT mycon (cdr WM ))
   )
   
 )
 
 
-(defun LIST-BEF (mycon counter WM)
-  (LIST-AFT mycon 0 (reverse WM) )
+(defun LIST-BEF (mycon  WM)
+  (LIST-AFT mycon (reverse WM) )
 
 )
 
@@ -31,26 +87,32 @@
 
   ;if the direction is after
   (if (equal dir 'AFT)
-      (LIST-AFT mycon 0 *WM)
+  		
+     (LIST-AFT mycon *WM) 
+      (LIST-BEF mycon *WM)
+   
   )
 
-
-  ;if the direction is before
-  (if (equal dir 'BEF)
-      (LIST-BEF 0 mycon *WM)
-  )
+  
 )
 
 (defun FIND-CON (mycon dir class)
-  (loop for x in (LIST-DIR mycon dir)
 
-      until (IS-SUBCLASS x class)
-
-      finally return x
-  )
-  nil
+		
+	
+	  (loop for x in (LIST-DIR mycon dir) do
+			
+		   (if (IS-SUBCLASS (car (eval x )) class) 
+				
+				(return x)
+			)
+  
+		
+	  
+	  nil
+	)
 )
-;;Jason is lame
+
 
 
 ;;Algorithm:
@@ -146,4 +208,35 @@
       (MEMB WEED MJ)
       (MEMB DRUG PHYS-OBJ)
     ))
+)
+
+(defun SETUP-FOR-FINDCON ()
+	(SETUP-GLOBALS)
+	(setq *WM '(CON0 CON1 CON2 CON3))
+	(setq CON0 '(HUMAN))
+	(setq CON1 '(INGEST AGENT AG01 OBJECT OBJ01))
+	(setq CON2 '(SIZE VAL (>NORM)))
+	(setq CON3 '(FOOD))
+	
+
+
+
+)
+
+(SETUP-FOR-FINDCON)
+
+( print 
+
+(FIND-CON 'CON1 'AFT 'FOOD)
+
+)
+( print 
+
+(FIND-CON 'CON1 'BEF 'FOOD)
+
+)
+( print 
+
+(FIND-CON 'CON1 'BEF 'ANIMATE)
+
 )

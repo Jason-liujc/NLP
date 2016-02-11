@@ -1,4 +1,3 @@
-; ;;;;;;NOT FINISHED YET, ALMOST
 
 
 
@@ -21,10 +20,9 @@
 	
 	;if TX is nil then return nil
 	(if (equal TX nil) nil)
-
+	(if (equal entity class) (return-from SUBCLASS-HELPER t))
 
 	(loop for x in TX do 
-	
 		(
 	
 			if ( equal ( nth 1 x ) entity)  
@@ -32,9 +30,7 @@
 					(return T)
 					
 					(if (SUBCLASS-HELPER (remove x TX) (nth 2 x) class ) (return T))
-				
 
-				
 				
 				)
 			
@@ -44,6 +40,7 @@
 		
 		
 	)
+	
 )
 
 
@@ -148,10 +145,23 @@
 (SETUP-GLOBALS)
 ;(cdr *TX)
 (print 
-	(IS-SUBCLASS 'ACT 'THINK)
+(IS-SUBCLASS 'HUMAN 'ANIMATE)
 
 )
 
+(print 
+(IS-SUBCLASS 'HUMAN 'ACT)
+
+)
+
+(print 
+(IS-SUBCLASS 'TEACH 'ACT)
+
+)
+(print 
+(IS-SUBCLASS 'ACT 'THINK)
+
+)
 
 
 
