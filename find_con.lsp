@@ -223,20 +223,20 @@
 
 )
 
-(SETUP-FOR-FINDCON)
-
-( print 
-
-(FIND-CON 'CON1 'AFT 'FOOD)
-
-)
-( print 
-
-(FIND-CON 'CON1 'BEF 'FOOD)
-
-)
-( print 
-
-(FIND-CON 'CON1 'BEF 'ANIMATE)
-
-)
+;(SETUP-FOR-FINDCON)
+;
+;( print 
+;
+;(FIND-CON 'CON1 'AFT 'FOOD)
+;
+;)
+;( print 
+;
+;(FIND-CON 'CON1 'BEF 'FOOD)
+;
+;)
+;( print 
+;
+;(FIND-CON 'CON1 'BEF 'ANIMATE)
+;
+;)
