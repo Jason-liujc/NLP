@@ -29,25 +29,42 @@
   )
 )
 
-(defun CHECKS-AGAINST-WM (con)
-  (loop for v in *WM
-    do
-      (if (not (IS-SUBCLASS (car (EVAL v)) 'ACT))
-        (if (not(null (MEMBER con (eval v))))
-          (return nil) ;;I WANT TO BREAK OUT OF HERE AND RETURN NIL FOR THIS FX
-        )
+
+
+;; CREATE A HELPER FUNCTION THAT IS RECURSION TO REPLACE MEMBER
+
+(defun RECURSIVELY-CHECKS-FRAME (x v)
+  (if (equal (second v) nil) nil)
+  (if (equal x (car v)) 
+    t
+    (progn
+      (if (atom (nth 1 v))
+        (RECURSIVELY-CHECKS-FRAME x (rest v))
       )
+      (if (listp (second v))
+        (RECURSIVELY-CHECKS-FRAME x (second v))
+      )
+    )
   )
-  t
+)
+
+(defun CHECKS-AGAINST-WM (con)
+  (let ((flag t))
+    (loop for v in *WM
+      do
+        (if (equal (RECURSIVELY-CHECKS-FRAME con (eval v)) t)
+          (setq flag nil)
+        )
+    )
+    flag
+  )
 )
 
 (defun CHECKS-IN-ACT (x)
-  (print x)
-  (print (CHECKS-AGAINST-WM x))
   (if (and (IS-SUBCLASS (car (EVAL x)) 'ACT) (CHECKS-AGAINST-WM x))
     x
+    nil
   )
-  nil
 )
 
 (defun MAIN-ACT ()
@@ -59,10 +76,10 @@
   )
 )    
 
-;ALGORITHM
-;Call each is-subclass on each subclass in TX with ACT as second variable
-;if true, use get-sf, to test if it's embeded in another frame. 
-; TA notes: need to use nested loop.
+; ALGORITHM
+; Loop through *WM, checks if x is a subclass of 'ACT, if so, check if x is used
+; in any of the other cons in *WM (by loop), if it is used, return nil. If it's not nil 
+; after that loop, return x
 
 ; -----------------------------------------------------------------------------
 ; Test Helper functions
@@ -93,3 +110,5 @@
 
 )
 
+
+(PRINT FLAG)
