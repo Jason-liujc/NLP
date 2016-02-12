@@ -1,0 +1,48 @@
+Algorithms for demon functions:
+
+
+Dem-srch
+
+	A=FIND-CON (mycon, dir class)
+	B=Get-SF(slot, (eval A))
+	if A nil, return nil 
+
+	Set B to A    //how do you set here???
+
+
+
+(defun DEM-AMEND (mycon myslot myfiller dir class)
+	
+		(setq (FIND-CON mycon dir class ) ;the con element
+			(AMEND-SF myslot myfiller (FIND-CON mycon dir class ) )
+		)
+	
+	
+		(FIND-CON mycon dir class )
+	
+
+	
+)
+
+
+dem_ref
+
+	A=find-CON(mycon, dir, class)
+	If (not (null A))
+		Then: (set A amend-SF(myslot, mycon, A))
+	Else 
+		Return nil
+
+
+
+
+Dem-exec   (see week3 functions)
+	
+	(loop x in *DM )
+		
+
+
+	
+Parse-sent sent
+	
+	Call the functions like the specs did. 
