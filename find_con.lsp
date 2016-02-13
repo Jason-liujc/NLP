@@ -128,6 +128,74 @@
 
 ;TA notes: use is-subclass, we can reverse the direction to simplify it!
 
+; -----------------------------------------------------------------------------
+; Helper functions
+; -----------------------------------------------------------------------------
+
+; FUNCTION: front-slot
+; PURPOSE:  Return the name of the first SLOT in FRAME
+; INPUT:    frame
+; OUTPUT:   atom: name of first SLOT
+(defun front-slot (frame)
+    (second frame)
+)
+
+; FUNCTION: front-filler
+; PURPOSE:  Return the FILLER of the first SLOT in FRAME
+; INPUT:    frame
+; OUTPUT:   frame/gap: filler of first SLOT in FRAME
+(defun front-filler (frame)
+    (third frame)
+)
+
+; FUNCTION: pop-slot
+; PURPOSE:  Return a copy of FRAME with its first slot-filler removed
+; INPUT:    frame
+; OUTPUT:   frame (with first slot-filler removed)
+(defun pop-slot (frame)
+    (cons (first frame) (nthcdr 3 frame))
+)
+
+; FUNCTION: f-pred
+; PURPOSE:  retrieves the front-predicate of a frame, or the symbol name if
+;           it's a gap
+; INPUTS:   frame: a gap or a frame
+; OUTPUT:   the predicate if it's a frame, or the symbol name if it's a gap
+(defun f-pred (frame)
+    (cond
+        ((listp frame) (first frame))
+        (t frame)
+    )
+)
+
+; FUNCTION: f-length
+; PURPOSE:  Safely checks the length of the input if it's a frame vs gap
+; INPUTS:   frame: a gap or a frame
+; OUTPUT:   length of frame if it's a frame; 1 if it's a gap
+(defun f-length (frame)
+    (cond
+        ((listp frame) (length frame))
+        (t 1)
+    )
+)
+
+; FUNCTION: rm-slot
+; PURPOSE:  Return a copy of FRAME, but with a single slot-filler removed
+; INPUT:    frame: frame to remove slot from
+;           slot: slot name to be removed
+; OUTPUT:   frame
+(defun rm-slot (slot frame)
+    (cond
+        ; Base case: no slots left, so we're done
+        ((<= (length frame) 1) frame)
+        ; Base case: front slot matches, so just pop it
+        ((equal (front-slot frame) slot) (pop-slot frame))
+        ; Recursive case: front slot doesn't match, so keep looking
+        (t (append (rm-slot slot (pop-slot frame)) (cons (front-slot frame) (list (front-filler frame)))))
+    )
+)
+
+
 
 ; -----------------------------------------------------------------------------
 ; Test Helper functions
@@ -223,7 +291,7 @@
 
 )
 
-;(SETUP-FOR-FINDCON)
+(SETUP-FOR-FINDCON)
 ;
 ;( print 
 ;

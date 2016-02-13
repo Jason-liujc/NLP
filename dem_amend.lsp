@@ -50,16 +50,22 @@
 ;           dir: either 'BEF or 'AFT indicating search direction
 ;           class: the predicate superclass for which to search
 ; OUTPUT:   found CONatom, or nil if nothing found
+
+;;the project spec never mentioned this but I returned nil when find-con returns nil.
+
 (defun DEM-AMEND (mycon myslot myfiller dir class)
 	
-		(setq (FIND-CON mycon dir class ) ;the con element
-			(AMEND-SF myslot myfiller (FIND-CON mycon dir class ) )
+	(let* ((l (FIND-CON mycon dir class)))
+		(set l ;the con element
+			(AMEND-SF myslot myfiller l  )
 		)
 	
 	
-		(FIND-CON mycon dir class )
+		l
 	
 
+
+	)
 	
 )
 
@@ -76,3 +82,5 @@ OBJECT OBJECT1))
 (print
 (DEM-AMEND 'CON1 'LOC '(STATE NAME (CALIFORNIA)) 'AFT 'SOCIAL-ENT)
 )
+
+(print  CON2)
