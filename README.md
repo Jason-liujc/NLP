@@ -2,19 +2,8 @@
 
 To Do:
 
-dem_amend
+Parse
 
-dem_exec
+Dem_search
 
-dem_ref
-
-dem_srch
-
-find_con
-
-man_act
-
-parse
-
-Extra:
-Optimize subclass
+Finishing up main-act, c'mon Amy!
