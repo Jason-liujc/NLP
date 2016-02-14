@@ -89,7 +89,7 @@
   (if (equal dir 'AFT)
   		
      (LIST-AFT mycon *WM) 
-      (LIST-BEF mycon *WM)
+     (LIST-BEF mycon *WM)
    
   )
 
@@ -101,7 +101,7 @@
 		
 	
 	  (loop for x in (LIST-DIR mycon dir) do
-			
+		;(print (eval x))
 		   (if (IS-SUBCLASS (car (eval x )) class) 
 				
 				(return x)
