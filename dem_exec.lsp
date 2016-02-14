@@ -14,9 +14,11 @@
 (defun DEM-EXEC ()
    
    (loop for x in *DM do 
-   		(eval x)
-   		(setq *DM (remove x *DM))
+   		(eval (list x))
    		
+   		(if (not (null x))
+   			(setq *DM (remove x *DM))
+   		)
    	)
    
 )
