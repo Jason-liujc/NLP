@@ -34,19 +34,10 @@
 ;; CREATE A HELPER FUNCTION THAT IS RECURSION TO REPLACE MEMBER
 
 (defun RECURSIVELY-CHECKS-FRAME (x v)
-  (if (equal (second v) nil) nil)
-  (if (equal x (car v)) 
-    t
-    (progn
-      (if (atom (nth 1 v))
-        (RECURSIVELY-CHECKS-FRAME x (rest v))
-      )
-      (if (listp (second v))
-        (RECURSIVELY-CHECKS-FRAME x (second v))
-      )
-    )
-  )
-)
+(cond ((null v) nil)
+  ((not (atom (car v))) (RECURSIVELY-CHECKS-FRAME x (append (car v) (cdr v))))
+  ((equal x (car v)) t)
+  (t (RECURSIVELY-CHECKS-FRAME x (cdr v)))))
 
 (defun CHECKS-AGAINST-WM (con)
   (let ((flag t))
@@ -78,8 +69,8 @@
 
 ; ALGORITHM
 ; Loop through *WM, checks if x is a subclass of 'ACT, if so, check if x is used
-; in any of the other cons in *WM (by loop), if it is used, return nil. If it's not nil 
-; after that loop, return x
+; in any of the other cons in *WM (by recursion), if it is used, return nil. If it's not nil 
+; after, return x
 
 ; -----------------------------------------------------------------------------
 ; Test Helper functions
@@ -96,19 +87,15 @@
     ))
 
     (setq *WM '(CON1 CON2 CON3 CON4 CON5))
-    ;(setq *WM '(CON1 CON3 CON4 CON5 CON6))
+    (setq *WM '(CON1 CON3 CON4 CON5 CON6))
     (setq CON1 '(HUMAN F-NAME (DORON) GENDER (MALE)))
     (setq CON2 '(THINK AGENT CON1 OBJECT CON4))
     (setq CON3 '(HUMAN F-NAME (MARY) GENDER (FEMALE)))
     (setq CON4 '(TEACH AGENT CON1 OBJECT CON4))
     (setq CON5 '(HUMAN F-NAME (BETTY) GENDER (FEMALE)))
     (setq CON6 '(HUMAN F-NAME (GEORGE) ACTION CON4))
-
-(print 
+(print
 
 (MAIN-ACT)
 
 )
-
-
-(PRINT FLAG)
