@@ -14,15 +14,29 @@
 (defun DEM-EXEC ()
    
    (loop for x in *DM do 
-   		(eval (list x))
+		(let ((result (eval x)) )
+			(if (not (null result))
+	   			(setq *DM (remove x *DM))
+	   		)
+		)   		
    		
-   		(if (not (null x))
-   			(setq *DM (remove x *DM))
-   		)
    	)
    
 )
 
 ; -----------------------------------------------------------------------------
+(setq r '(1 2 3 2 5 2))
+(defun yo ()
+	
+		(loop for x in r do 
+   			(if (equal x 2)
+   				(setq r (remove x r))
+   				nil
+   			)
+   		)
+   	
+	
 
-
+)
+(yo)
+(print r)

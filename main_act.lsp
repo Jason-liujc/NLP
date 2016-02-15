@@ -87,7 +87,7 @@
     ))
 
     (setq *WM '(CON1 CON2 CON3 CON4 CON5))
-    (setq *WM '(CON1 CON3 CON4 CON5 CON6))
+    ;(setq *WM '(CON1 CON3 CON4 CON5 CON6))
     (setq CON1 '(HUMAN F-NAME (DORON) GENDER (MALE)))
     (setq CON2 '(THINK AGENT CON1 OBJECT CON4))
     (setq CON3 '(HUMAN F-NAME (MARY) GENDER (FEMALE)))
