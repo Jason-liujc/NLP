@@ -1,7 +1,2 @@
-# Natural-Language-Processing
-
-To Do:
-
-Parse
-
-Dem_search
+To run the program in terminal, simply use:
+clisp newHw4.lsp under Mac terminal
